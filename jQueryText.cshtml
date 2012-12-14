@@ -1,0 +1,44 @@
+﻿@{
+    Page.Title = "Sorting Arrows";
+    var db = Database.Open("Northwind");
+    var sql = "SELECT CustomerID, CompanyName, ContactName, Address, City, Country, Phone FROM Customers";
+    var data = db.Query(sql);
+    var grid = new WebGrid(data, ajaxUpdateContainerId: "grid", ajaxUpdateCallback: "setArrows");
+}
+<h1>Sorting arrows</h1>
+<div id="gridContainer">
+    <div id="grid">
+        @grid.GetHtml(    
+            tableStyle : "table",
+            alternatingRowStyle : "alternate",
+            headerStyle : "header",
+            columns: grid.Columns(
+                grid.Column("CustomerID", "ID"),
+                grid.Column("CompanyName", "Company Name"),
+                grid.Column("ContactName", "Contact Name"),
+                grid.Column("Address"),
+                grid.Column("City"),
+                grid.Column("Country"),
+                grid.Column("Phone")
+            )
+        )
+        @Html.Hidden("dir", grid.SortDirection) @Html.Hidden("col", grid.SortColumn)
+    </div>
+</div>
+@section script{
+<script type="text/javascript">
+    
+    function setArrows() {
+        var dir = $('#dir').val();
+        var col = $('#col').val();
+        var header = $('th a[href*=' + col + ']');
+        if (dir == 'Ascending') {
+            header.text(header.text() + ' ▲');
+        }
+        if (dir == 'Descending') {
+            header.text(header.text() + ' ▼');
+        }
+    };
+
+</script>
+}

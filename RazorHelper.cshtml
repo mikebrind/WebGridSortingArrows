@@ -1,0 +1,32 @@
+﻿@{
+    Page.Title = "Sorting Arrows";
+    var db = Database.Open("Northwind");
+    var sql = "SELECT CustomerID, CompanyName, ContactName, Address, City, Country, Phone FROM Customers";
+    var data = db.Query(sql);
+    var grid = new WebGrid(data, ajaxUpdateContainerId: "grid");
+}
+<h1>Sorting arrows</h1>
+<div id="gridContainer">
+    <div id="grid">
+        @grid.GetHtml(    
+            tableStyle : "table",
+            alternatingRowStyle : "alternate",
+            headerStyle : "header",
+            columns: grid.Columns(
+                grid.Column("CustomerID", Sorter("CustomerID", "ID", grid)),
+                grid.Column("CompanyName", Sorter("CompanyName", "Company Name", grid)),
+                grid.Column("ContactName", Sorter("ContactName", "Contact Name", grid)),
+                grid.Column("Address", Sorter("Address", "Address", grid)),
+                grid.Column("City", Sorter("City", "City", grid)),
+                grid.Column("Country", Sorter("Country", "Country", grid)),
+                grid.Column("Phone", Sorter("Phone", "Phone", grid))
+            )
+        )
+    </div>
+</div>
+
+@functions {
+    public static string Sorter(string columnName, string columnHeader, WebGrid grid){
+        return string.Format("{0} {1}", columnHeader, grid.SortColumn == columnName ? grid.SortDirection == SortDirection.Ascending ? "▲" : "▼" : string.Empty);
+    }
+}
