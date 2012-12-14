@@ -4,7 +4,7 @@
     var query = "SELECT * FROM Customers";
     var data = db.Query(query);
     var columns = new[]{"CustomerID", "CompanyName", "ContactName", "Address", "City", "Country", "Phone"};
-    var grid = new WebGrid(data, ajaxUpdateContainerId: "grid", columnNames: columns, ajaxUpdateCallback: "setArrows");
+    var grid = new WebGrid(data, ajaxUpdateContainerId: "grid", columnNames: columns, ajaxUpdateCallback: "setArrowImages");
 }
 <h1>Sorting arrows</h1>
 <div id="gridContainer">
@@ -49,12 +49,22 @@
 
     function setArrows() {
         col = col.replace(' ▲', '').replace(' ▼', '');
-        var header = $('th a:contains(' + col + ')');
+        var header = $('th:contains(' + col + ')');
         if (dir == 'ASC') {
             header.text(header.text() + ' ▲');
         }
         if (dir == 'DES') {
             header.text(header.text() + ' ▼');
+        }
+    };
+
+    function setArrowImages() {
+        var header = $('th:contains(' + col + ')');
+        if (dir == 'ASC') {
+            header.html(header.html() + ' <img src="/images/arrow-up.png" alt="Ascending" />');
+        }
+        if (dir == 'DES') {
+            header.html(header.html() + ' <img src="/images/arrow-down.png" alt="Descending" />');
         }
     };
 </script>
